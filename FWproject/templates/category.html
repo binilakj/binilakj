@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+       {{category.description|truncatewords:155}}
+    {% else %}
+       Welcome to Best Choice
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+     {% if category %}
+       {{category.name}} - Best Choice Shop
+    {% else %}
+      Our new collections - Best Choice Shop
+    {% endif %}
+{% endblock %}
+{% block content %}
+{% if category %}
+   <div>
+       <div class="row r_class">
+           <div class="mx-auto">
+          <p><a href="{% url 'FWapp:procat' %}">Products Collections</a></p>
+       </div>
+   </div>
+   </div>
+{% endif %}
+   <div class="mx_auto">
+       {% if category %}
+      <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" height="100px;" width="50px;">
+   </div>
+<br>
+   <div>
+      <h1 class="text-center my_title">{{category.name}}</h1>
+      <p class="text-justify">{{category.description}}</p>
+   </div>
+   {% else %}
+   <div>
+     <img class="my_image image_padding" src="{% static 'image/banner.png' %}" alt="Our products">
+   </div>
+<br>
+    <div>
+      <h1 class="text-center my_title">Our products collections</h1>
+        <p class="text-justify">This family company believes that trust and loyalty are earned. That's why when you join the Best Choice Footwear Family we do our very best to earn yours.
+            We care about your experience, we want you to come back time and time again and we want you to feel part of our community; because we definitely see you as the most important part of ours!
+            We take great pride in striving for 100% customer satisfaction, join the Best Choice Footwear Family to find out what else we do differently.
+            Our footwear is designed focused on fit and comfort, manufactured to last with superior materials and production methods. We make riding and country boots better.
+            We have time for you. Our over the phone fitting service specialises in matching your requirements to the perfect size and style.</p>
+    </div>
+{% endif %}
+    <div class="container">
+        <div class="row mx_auto">
+            {% for pro in products.object_list %}
+            <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+                <div class="card text-center" style="min-width:18rem;" >
+                    <a href="{{pro.get_url}}"><img src="{{pro.image.url}}" alt="{{pro.name}}" height="200px;" width="200px;"></a>
+                    <div class="card-body">
+                        <h4>{{pro.name}}</h4>
+                        <p>{{pro.price}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+              {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+{% endblock %}
